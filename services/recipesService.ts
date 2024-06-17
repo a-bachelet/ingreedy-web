@@ -54,6 +54,27 @@ export interface RecipeList {
   }
 }
 
+export interface RecipeSuggestionIngredient {
+  id: number;
+  unit_id: number;
+  quantity: number;
+}
+
+export interface RecipeSuggestionRecipe {
+  id: number;
+  name: string;
+  score: number;
+  perfect: boolean
+}
+
+export interface RecipeSuggestion {
+  suggestion: {
+    id: number;
+    ingredients: RecipeSuggestionIngredient[];
+    recipes: RecipeSuggestionRecipe[];
+  }
+}
+
 export default class RecipesService {
   public static listRecipes(page: number = 1): Promise<RecipeList> {
     return new Promise(async (resolve, reject) => {
@@ -97,5 +118,27 @@ export default class RecipesService {
     });
   }
 
-  public static suggestRecipes(): void {}
+  public static suggestRecipes(perfectMatchOnly: boolean = false): Promise<RecipeSuggestion> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recipes/suggest`, {
+          method: 'POST',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({suggestion: { perfect_match_only: perfectMatchOnly }})
+        });
+
+        if (!response.ok) {
+          console.error(`Error ${response.status}`)
+          reject(`Error ${response.status}`)
+        }
+
+        const data = await response.json()
+
+        resolve(data)
+      } catch(error) {
+        console.error(error);
+        reject(error)
+      }
+    });
+  }
 }

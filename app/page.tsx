@@ -2,6 +2,7 @@
 
 import AddFridgeIngredientDialog from "@/components/add-fridge-ingredient-dialog";
 import FridgeIngredientsTable from "@/components/fridge-ingredients-table";
+import RecipeSuggestionDialog from "@/components/recipes-suggestion-dialog";
 import UpdateFridgeIngredientDialog from "@/components/update-fridge-ingredient-dialog";
 import { useFridgeIngredientList } from "@/hooks/useFridge";
 import { FridgeIngredient } from "@/services/fridgeService";
@@ -9,7 +10,10 @@ import { ArrowPathIcon, DocumentMagnifyingGlassIcon, MagnifyingGlassIcon, PlusIc
 import { Button, CardBody, CardFooter, CardHeader, Input, Typography } from "@material-tailwind/react";
 import { useRef, useState } from "react";
 
-function HomeHeader({ onAddClick }: { onAddClick: () => void }) {
+function HomeHeader({ onAddClick, onSuggestionsClick }: {
+  onAddClick: () => void ,
+  onSuggestionsClick: () => void 
+}) {
   return (
     <CardHeader floated={false} shadow={false} className="rounded-none overflow-visible">
       <div className="mb-8 flex items-start justify-between gap-8">
@@ -25,7 +29,7 @@ function HomeHeader({ onAddClick }: { onAddClick: () => void }) {
           <Button onClick={onAddClick} className="flex items-center justify-center gap-3" size="sm">
             <PlusIcon strokeWidth={2} className="h-4 w-4" /> Ajouter un ingrédient
           </Button>
-          <Button className="flex items-center justify-center gap-3" size="sm">
+          <Button onClick={onSuggestionsClick} className="flex items-center justify-center gap-3" size="sm">
             <DocumentMagnifyingGlassIcon strokeWidth={2} className="h-4 w-4" /> Suggérrer des recettes
           </Button>
         </div>
@@ -38,14 +42,19 @@ export default function Home() {
   const [fridgeIngredients, addIngredientToFridge, updateFridgeIngredient, removeIngredientFromFridge, isLoading, isError, error] = useFridgeIngredientList();
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+  const [sugegstionsDialogOpen, setSuggestionsDialogOpen] = useState(false);
 
   const updateRef = useRef<FridgeIngredient>({} as FridgeIngredient);
 
   return (
     <>
-      <HomeHeader onAddClick={() => setAddDialogOpen(true)} />
+      <HomeHeader
+        onAddClick={() => setAddDialogOpen(true)}
+        onSuggestionsClick={() => setSuggestionsDialogOpen(true)}
+      />
       <AddFridgeIngredientDialog open={addDialogOpen} setOpen={setAddDialogOpen} addIngredient={addIngredientToFridge} />
       <UpdateFridgeIngredientDialog fridgeIngredient={updateRef.current} open={updateDialogOpen} setOpen={setUpdateDialogOpen} updateIngredient={updateFridgeIngredient} />
+      <RecipeSuggestionDialog open={sugegstionsDialogOpen} setOpen={setSuggestionsDialogOpen} />
       <CardBody className="p-0 px-0 max-h-full h-full overflow-y-auto overflow-x-none">
         <FridgeIngredientsTable fridgeIngredients={fridgeIngredients} updateIngredient={(fridgeIngredient) => {updateRef.current = fridgeIngredient; setUpdateDialogOpen(true)}} removeIngredient={removeIngredientFromFridge} />
       </CardBody>

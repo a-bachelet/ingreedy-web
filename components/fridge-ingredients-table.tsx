@@ -9,8 +9,6 @@ export default function FridgeIngredientsTable({ fridgeIngredients, removeIngred
   removeIngredient: (fridgeIngredient: FridgeIngredient) => void,
   updateIngredient: (fridgeIngredient: FridgeIngredient) => void
 }) {
-  console.log(fridgeIngredients)
-
   return (
     <table className="w-full min-w-max table-fixed text-left">
       <thead className="sticky top-0 left-0 right-0">

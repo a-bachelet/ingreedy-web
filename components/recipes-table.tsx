@@ -1,6 +1,5 @@
 import { Recipe } from "@/services/recipesService";
 import { Typography } from "@material-tailwind/react";
-import Image from "next/image";
 
 const TABLE_HEAD = ["ID", "Nom", "Note", "Budget", "Difficulté", "Image", "Temps", "Astuce"];
 
