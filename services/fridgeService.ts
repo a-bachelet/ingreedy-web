@@ -31,7 +31,7 @@ export default class FridgeService {
     });
   }
 
-  public static addIngredient(id: number, quantity: number, unit_id: number): Promise<{ fridge_ingredient: FridgeIngredient }> {
+  public static addIngredient(id: number, quantity: number, unit_id: number|null): Promise<{ fridge_ingredient: FridgeIngredient }> {
     return new Promise(async (resolve, reject) => {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/fridge/add_ingredient`, {

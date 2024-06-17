@@ -1,20 +1,60 @@
 'use client'
 
+import AddFridgeIngredientDialog from "@/components/add-fridge-ingredient-dialog";
+import FridgeIngredientsTable from "@/components/fridge-ingredients-table";
+import UpdateFridgeIngredientDialog from "@/components/update-fridge-ingredient-dialog";
 import { useFridgeIngredientList } from "@/hooks/useFridge";
-import FridgeService from "@/services/fridgeService";
-import { Button } from "@material-tailwind/react";
-import { useEffect } from "react";
+import { FridgeIngredient } from "@/services/fridgeService";
+import { ArrowPathIcon, DocumentMagnifyingGlassIcon, MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { Button, CardBody, CardFooter, CardHeader, Input, Typography } from "@material-tailwind/react";
+import { useRef, useState } from "react";
+
+function HomeHeader({ onAddClick }: { onAddClick: () => void }) {
+  return (
+    <CardHeader floated={false} shadow={false} className="rounded-none overflow-visible">
+      <div className="mb-8 flex items-start justify-between gap-8">
+        <div>
+          <Typography variant="h5" color="blue-gray">
+            Mon frigo
+          </Typography>
+          <Typography color="gray" className="mt-1 font-normal">
+            By Ingreedy...
+          </Typography>
+        </div>
+        <div className="w-full md:w-72 flex flex-col items-stretch gap-2">
+          <Button onClick={onAddClick} className="flex items-center justify-center gap-3" size="sm">
+            <PlusIcon strokeWidth={2} className="h-4 w-4" /> Ajouter un ingrédient
+          </Button>
+          <Button className="flex items-center justify-center gap-3" size="sm">
+            <DocumentMagnifyingGlassIcon strokeWidth={2} className="h-4 w-4" /> Suggérrer des recettes
+          </Button>
+        </div>
+      </div>
+    </CardHeader>
+  );
+}
 
 export default function Home() {
-  const [fridgeIngredients, isLoading, isError, error] = useFridgeIngredientList();
+  const [fridgeIngredients, addIngredientToFridge, updateFridgeIngredient, removeIngredientFromFridge, isLoading, isError, error] = useFridgeIngredientList();
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+
+  const updateRef = useRef<FridgeIngredient>({} as FridgeIngredient);
 
   return (
     <>
-      { isLoading && 'Chargement en cours...' }
-      { isError && <p className="text-red">{error}</p> }
-      { fridgeIngredients.map(ing => <div key={ing.ingredient_id}>
-        {ing.ingredient_id} || {JSON.stringify(ing.ingredient_names)} || {ing.quantity}
-      </div>) }
+      <HomeHeader onAddClick={() => setAddDialogOpen(true)} />
+      <AddFridgeIngredientDialog open={addDialogOpen} setOpen={setAddDialogOpen} addIngredient={addIngredientToFridge} />
+      <UpdateFridgeIngredientDialog fridgeIngredient={updateRef.current} open={updateDialogOpen} setOpen={setUpdateDialogOpen} updateIngredient={updateFridgeIngredient} />
+      <CardBody className="p-0 px-0 max-h-full h-full overflow-y-auto overflow-x-none">
+        <FridgeIngredientsTable fridgeIngredients={fridgeIngredients} updateIngredient={(fridgeIngredient) => {updateRef.current = fridgeIngredient; setUpdateDialogOpen(true)}} removeIngredient={removeIngredientFromFridge} />
+      </CardBody>
+      <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+        { isError && error && <Typography variant="small" color="red" className="font-normal">
+          Une erreur est survenue.
+        </Typography> }
+        { isLoading && <div className="flex flex-row gap-2 items-center"><ArrowPathIcon className="h-5 w-5 animate-spin" /> Chargement des ingrédients...</div> }
+      </CardFooter>
     </>
   );
 }
