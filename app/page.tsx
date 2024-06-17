@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from "@material-tailwind/react";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -20,6 +21,8 @@ export default function Home() {
   })
 
   return (
-    <p>Hello world !</p>
+    <Button>
+      Hello world !
+    </Button>
   );
 }
