@@ -1,6 +1,6 @@
 export interface Ingredient {
   id: number;
-  names: string;
+  names: { singular: string, plural: string };
 }
 
 export interface IngredientList {

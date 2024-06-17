@@ -1,19 +1,23 @@
 import IngredientsService, { Ingredient } from "@/services/ingredientsService";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function useIngredientList(): [
-  Ingredient[], boolean, boolean, string, boolean, boolean,
-  () => void, () => void
+  Ingredient[], string, (search: string) => void, boolean, boolean, string,
+  number, number, boolean, boolean, () => void, () => void
 ] {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
+  const [lastPage, setLastPage] = useState(1)
   const [prevPage, setPrevPage] = useState<number | null>(null)
   const [nextPage, setNextPage] = useState<number | null>(null)
   const [hasPrevPage, setHasPrevPage] = useState(false)
   const [hasNextPage, setHasNextPage] = useState(false)
+
+  const searchRef = useRef(search)
 
   const loadPrevPage = () => {
     if (prevPage) {
@@ -28,13 +32,30 @@ export function useIngredientList(): [
   }
 
   useEffect(() => {
+    const newSearch = searchRef.current === '' && search != ''
+    const newList = searchRef.current != '' && search === ''
+
+    searchRef.current = search
+
+    if (newSearch || newList) {
+      setIngredients([])
+      setCurrentPage(1)
+      setPrevPage(null)
+      setNextPage(null)
+    }
+
+    const dataFunc = search ?
+      IngredientsService.searchIngredients(search, newSearch || newList ? 1 : currentPage) :
+      IngredientsService.listIngredients(newSearch || newList ? 1 : currentPage)
+  
     setIsLoading(true);
     setIsError(false);
     setError('');
-    IngredientsService
-      .listIngredients(currentPage)
+    
+    dataFunc
       .then(data => {
         setIngredients(data.ingredients)
+        setLastPage(Math.ceil(data.pagination.total_count / data.pagination.count))
         setPrevPage(data.pagination.prev_page)
         setNextPage(data.pagination.next_page)
       })
@@ -46,15 +67,14 @@ export function useIngredientList(): [
       .finally(() => {
         setIsLoading(false)
       })
-  }, [currentPage])
+  }, [currentPage, search])
 
   useEffect(() => setHasPrevPage(!!prevPage), [prevPage])
   useEffect(() => setHasNextPage(!!nextPage), [nextPage])
 
   return [
-    ingredients, isLoading, isError, error, hasPrevPage, hasNextPage,
+    ingredients, search, setSearch, isLoading, isError, error,
+    currentPage, lastPage, hasPrevPage, hasNextPage,
     loadPrevPage, loadNextPage
   ]
 }
-
-export function useIngredientSearch() {}

@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import IngreedyNav from "@/components/ingreedy-nav";
+import { Card } from "@material-tailwind/react";
+import IngreedyContent from "@/components/ingreedy-content";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,10 +20,14 @@ export default function RootLayout({
 }>) {
   return (
     <Providers>
-      <html lang="fr">
-        <body className={inter.className}>
-          <IngreedyNav />
-          {children}
+      <html lang="fr" className="w-full h-full">
+        <body className={`${inter.className} w-full h-full`}>
+          <div className="w-full h-full">
+            <IngreedyNav />
+            <IngreedyContent>
+              {children}
+            </IngreedyContent>
+          </div>
         </body>
       </html>
     </Providers>

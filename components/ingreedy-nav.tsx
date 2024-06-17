@@ -58,7 +58,7 @@ export default function IngreedyNav() {
   return (
     <Navbar className="mx-auto !max-w-full px-6 py-3 rounded-none">
       <div className="max-w-full flex justify-center">
-        <div className="max-w-[768px] w-[768px] flex items-center justify-between text-blue-gray-900">
+        <div className="max-w-[1024px] w-full flex items-center justify-between text-blue-gray-900">
           <Typography as="a" href="#" variant="h6" className="mr-4 cursor-pointer py-1.5">
             Ingreedy
           </Typography>
