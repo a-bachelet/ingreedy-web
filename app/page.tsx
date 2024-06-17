@@ -1,55 +1,20 @@
 'use client'
 
+import { useFridgeIngredientList } from "@/hooks/useFridge";
 import FridgeService from "@/services/fridgeService";
 import { Button } from "@material-tailwind/react";
 import { useEffect } from "react";
 
 export default function Home() {
-  const list = () => {
-    FridgeService.listIngredients().then(data => {
-      console.log('Fridge ingredients list :')
-      console.log(data)
-      console.log('-------------------------')
-      console.log('')
-    })
-  }
-
-  const add = () => {
-    FridgeService.addIngredient(25, 200, 49).then(data => {
-      console.log('Added fridge ingredient :')
-      console.log(data)
-      console.log('-------------------------')
-      console.log('')
-    })
-  }
-
-  const update = () => {
-    FridgeService.updateIngredient(25, 300, 78).then(data => {
-      console.log('Updated fridge ingredient :')
-      console.log(data)
-      console.log('-------------------------')
-      console.log('')
-    })
-  }
-
-  const remove = () => {
-    FridgeService.removeIngredient(25).then(() => {
-      console.log('Removed fridge ingredient !')
-      FridgeService.listIngredients().then(data => {
-        console.log('Fridge ingredients list :')
-        console.log(data)
-      })
-      console.log('-------------------------')
-      console.log('')
-    })
-  }
+  const [fridgeIngredients, isLoading, isError, error] = useFridgeIngredientList();
 
   return (
     <>
-      <Button onClick={list}>List</Button>
-      <Button onClick={add}>Add</Button>
-      <Button onClick={update}>Update</Button>
-      <Button onClick={remove}>Remove</Button>
+      { isLoading && 'Chargement en cours...' }
+      { isError && <p className="text-red">{error}</p> }
+      { fridgeIngredients.map(ing => <div key={ing.ingredient_id}>
+        {ing.ingredient_id} || {JSON.stringify(ing.ingredient_names)} || {ing.quantity}
+      </div>) }
     </>
   );
 }

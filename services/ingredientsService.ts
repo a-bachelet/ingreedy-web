@@ -1,10 +1,10 @@
-interface Ingredient {
+export interface Ingredient {
   id: number;
   names: string;
 }
 
-interface IngredientList {
-  recipes: Ingredient[];
+export interface IngredientList {
+  ingredients: Ingredient[];
   pagination : {
     count: number;
     total_count: number;

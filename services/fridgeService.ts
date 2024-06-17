@@ -1,4 +1,4 @@
-interface FridgeIngredient {
+export interface FridgeIngredient {
   ingredient_id: number;
   quantity: number;
   unit_id: number;
@@ -6,7 +6,7 @@ interface FridgeIngredient {
   unit_names: { singular: string; plural: string; };
 }
 
-interface FridgeIngredientList {
+export interface FridgeIngredientList {
   ingredients: FridgeIngredient[]
 }
 

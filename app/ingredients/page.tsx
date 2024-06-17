@@ -1,18 +1,22 @@
 'use client'
 
-import IngredientsService from "@/services/ingredientsService";
+import { useIngredientList } from "@/hooks/useIngredients";
 import { Button } from "@material-tailwind/react";
-import { useEffect } from "react";
 
 export default function Ingredients() {
-  useEffect(() => {
-    IngredientsService.listIngredients().then(data => console.log(data))
-    IngredientsService.searchIngredients('poire').then(data => console.log(data))
-  })
+  const [ingredients, isLoading, isError, error, hasPrevPage, hasNextPage, loadPrevPage, loadNextPage] = useIngredientList();
 
   return (
-    <Button>
-      Hello world Ingredients !
-    </Button>
+    <>
+      { isLoading && 'Chargement en cours...' }
+      { isError && <p className="text-red">{error}</p> }
+      { ingredients.map(ing => <div key={ing.id}>{ing.id}</div>) }
+      { hasPrevPage && <Button onClick={loadPrevPage}>
+        Page Précédente
+      </Button> }
+      { hasNextPage && <Button onClick={loadNextPage}>
+        Page Suivante
+      </Button> }
+    </>
   );
 }

@@ -1,4 +1,4 @@
-enum RecipeBudget {
+export enum RecipeBudget {
   cheap = 'cheap',
   affordable = 'affordable',
   medium = 'medium',
@@ -7,31 +7,31 @@ enum RecipeBudget {
   luxurious = 'luxurious'
 }
 
-enum RecipeDifficulty {
+export enum RecipeDifficulty {
   very_easy = 'very_easy',
   easy = 'easy',
   medium = 'medium',
   difficult = 'difficult'
 }
 
-interface RecipeAuthor {
+export interface RecipeAuthor {
   name: string;
   tip: string;
 }
 
-interface RecipeTimes {
+export interface RecipeTimes {
   prep: number;
   cook: number;
   total: number;
 }
 
-interface RecipeIngredient {
+export interface RecipeIngredient {
   names: { singular: string; plural: string };
   quantity: number;
   unit_names: { singular: string; plural: string };
 }
 
-interface Recipe {
+export interface Recipe {
   id: number;
   name: string;
   rate: number;
@@ -43,7 +43,7 @@ interface Recipe {
   times: RecipeTimes;
 }
 
-interface RecipeList {
+export interface RecipeList {
   recipes: Recipe[];
   pagination : {
     count: number;
