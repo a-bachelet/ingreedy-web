@@ -64,7 +64,7 @@ export default function IngreedyNav() {
           </Typography>
           <div className="grow"></div>
           <div className="hidden lg:block">
-          <NavList />
+          <NavList onNavigated={() => { setOpenNav(false) }} />
           </div>
           <IconButton
             variant="text"
