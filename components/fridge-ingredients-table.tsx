@@ -53,7 +53,7 @@ export default function FridgeIngredientsTable({ fridgeIngredients, removeIngred
                   </Typography>
                 </td>
                 <td className={`${classes} flex flex-row items-center justify-start gap-2`}>
-                <Button onClick={() => updateIngredient({ ingredient_id, quantity, unit_id } as FridgeIngredient)} color="orange" className="flex items-center justify-center gap-3" size="sm">
+                <Button onClick={() => updateIngredient({ ingredient_id, quantity, unit_id, ingredient_names, unit_names } as FridgeIngredient)} color="orange" className="flex items-center justify-center gap-3" size="sm">
                     <PencilIcon strokeWidth={2} className="h-4 w-4" />
                   </Button>
                   <Button onClick={() => removeIngredient({ ingredient_id } as FridgeIngredient)} color="red" className="flex items-center justify-center gap-3" size="sm">

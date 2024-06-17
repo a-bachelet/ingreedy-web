@@ -1,5 +1,6 @@
 import { Recipe } from "@/services/recipesService";
-import { Typography } from "@material-tailwind/react";
+import { ClockIcon, CurrencyDollarIcon, CurrencyEuroIcon, HandThumbUpIcon } from "@heroicons/react/24/outline";
+import { Chip, Typography } from "@material-tailwind/react";
 
 const TABLE_HEAD = ["ID", "Nom", "Note", "Budget", "Difficulté", "Image", "Temps", "Astuce"];
 
@@ -23,6 +24,64 @@ export default function RecipesTable({ recipes }: { recipes: Recipe[]; }) {
               const isLast = index === recipes.length - 1;
               const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
+              let budgetIcon = <></>
+
+              switch(budget) {
+                case 'affordable':
+                  budgetIcon = <>
+                    <CurrencyEuroIcon color="gren" className="w-5 h-5" />
+                  </>;
+                  break;
+                case 'medium':
+                  budgetIcon = <>
+                    <CurrencyEuroIcon color="orange" className="w-5 h-5" />
+                    <CurrencyEuroIcon color="orange" className="w-5 h-5" />
+                  </>;
+                  break;
+                case 'high':
+                  budgetIcon = <>
+                    <CurrencyEuroIcon color="red" className="w-5 h-5" />
+                    <CurrencyEuroIcon color="red" className="w-5 h-5" />
+                    <CurrencyEuroIcon color="red" className="w-5 h-5" />
+                  </>;
+                  break;
+              }
+
+              let difficultyIcon = <></>
+
+              switch(difficulty) {
+                case 'very_easy':
+                  difficultyIcon = <>
+                    <HandThumbUpIcon color="green" className="w-5 h-5" />
+                    <HandThumbUpIcon color="green" className="w-5 h-5" />
+                    <HandThumbUpIcon color="green" className="w-5 h-5" />
+                    <HandThumbUpIcon color="green" className="w-5 h-5" />
+                    <HandThumbUpIcon color="green" className="w-5 h-5" />
+                  </>;
+                  break;
+                case 'easy':
+                  difficultyIcon = <>
+                    <HandThumbUpIcon color="green" className="w-5 h-5" />
+                    <HandThumbUpIcon color="green" className="w-5 h-5" />
+                    <HandThumbUpIcon color="green" className="w-5 h-5" />
+                    <HandThumbUpIcon color="green" className="w-5 h-5" />
+                  </>;
+                  break;
+                case 'medium':
+                  difficultyIcon = <>
+                    <HandThumbUpIcon color="orange" className="w-5 h-5" />
+                    <HandThumbUpIcon color="orange" className="w-5 h-5" />
+                    <HandThumbUpIcon color="orange" className="w-5 h-5" />
+                  </>;
+                  break;
+                case 'difficult':
+                  difficultyIcon = <>
+                    <HandThumbUpIcon color="red" className="w-5 h-5" />
+                    <HandThumbUpIcon color="red" className="w-5 h-5" />
+                  </>;
+                  break;
+              }
+              
               return (
                 <tr key={id}>
                   <td className={classes}>
@@ -41,13 +100,13 @@ export default function RecipesTable({ recipes }: { recipes: Recipe[]; }) {
                     </Typography>
                   </td>
                   <td className={classes}>
-                    <Typography variant="small" color="blue-gray" className="font-normal break-all">
-                      {budget}
+                    <Typography variant="small" color="blue-gray" className="font-normal break-all flex flex-row">
+                      {budgetIcon}
                     </Typography>
                   </td>
                   <td className={classes}>
-                    <Typography variant="small" color="blue-gray" className="font-normal break-all">
-                      {difficulty}
+                    <Typography variant="small" color="blue-gray" className="font-normal break-all flex flex-row">
+                      {difficultyIcon}
                     </Typography>
                   </td>
                   <td className={classes}>
@@ -60,8 +119,10 @@ export default function RecipesTable({ recipes }: { recipes: Recipe[]; }) {
                     </Typography>
                   </td>
                   <td className={classes}>
-                    <Typography variant="small" color="blue-gray" className="font-normal break-all">
-                      {JSON.stringify(times)}
+                    <Typography variant="small" color="blue-gray" className="font-normal break-all flex flex-col gap-1">
+                      <Chip value={'P ' + times.preparation + '\''} variant="ghost" icon={<ClockIcon />} />
+                      <Chip value={'C ' + times.cooking + '\''} variant="ghost" icon={<ClockIcon />} />
+                      <Chip value={'T ' + times.total + '\''} variant="ghost" icon={<ClockIcon />} />
                     </Typography>
                   </td>
                   <td className={classes}>

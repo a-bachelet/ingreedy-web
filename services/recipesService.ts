@@ -20,8 +20,8 @@ export interface RecipeAuthor {
 }
 
 export interface RecipeTimes {
-  prep: number;
-  cook: number;
+  preparation: number;
+  cooking: number;
   total: number;
 }
 

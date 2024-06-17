@@ -36,21 +36,25 @@ interface RecipesSuggestionDialogProps {
 }
 
 export default function RecipeSuggestionDialog({ open, setOpen }: RecipesSuggestionDialogProps) {
-  const handleOpen = () => setOpen(!open);
+  if (open) {
+    const handleOpen = () => setOpen(!open);
 
-  const [perfectMatchOnly, setPerfectMatchOnly, suggestions, isLoading, isError, error] = useSuggestions(false);
-
-  return (
-    <Dialog size="lg" open={open} handler={handleOpen} className="h-[calc(100%-4rem)] overflow-auto">
-      <DialogBody className="m-4">
-        <div className="flex flex-row items-center justify-between mb-4">
-          <Switch label="Tous les ingrédients" onChange={() => setPerfectMatchOnly(!perfectMatchOnly)} checked={perfectMatchOnly} />
-          <RecipesSuggestionLoader isLoading={isLoading} isError={isError} error={error} />
-        </div>
-        <div className="h-full w-full">
-          { !isError && <RecipesSuggestionTable suggestions={suggestions} /> }
-        </div>
-      </DialogBody> 
-    </Dialog>
-  );
+    const [perfectMatchOnly, setPerfectMatchOnly, suggestions, isLoading, isError, error] = useSuggestions(false);
+  
+    return (
+      <Dialog size="lg" open={open} handler={handleOpen} className="h-[calc(100%-4rem)] overflow-auto">
+        <DialogBody className="m-4">
+          <div className="flex flex-row items-center justify-between mb-4">
+            <Switch label="Tous les ingrédients" onChange={() => setPerfectMatchOnly(!perfectMatchOnly)} checked={perfectMatchOnly} />
+            <RecipesSuggestionLoader isLoading={isLoading} isError={isError} error={error} />
+          </div>
+          <div className="h-full w-full">
+            { !isError && <RecipesSuggestionTable suggestions={suggestions} /> }
+          </div>
+        </DialogBody> 
+      </Dialog>  
+    );
+  } else {
+    return <></>
+  }
 }
